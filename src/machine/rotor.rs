@@ -3,7 +3,7 @@ use std::collections::HashSet;
 /// Represents the rotors of the Enigma machine. Translates characters passed into the rotor,
 /// steps the rotor when required (either each letter in the case of the rightmost rotor,
 /// or when the rotor to the right hits its notch).
-struct Rotor {
+pub(crate) struct Rotor {
     /// Which letters/positions are translated by this rotor
     /// when going forward
     path_fwd: [u8; 26],
