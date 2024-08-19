@@ -1,8 +1,36 @@
+use std::fmt;
+use std::collections::HashSet;
+
 /// Struct representing the plugboard.
 /// This translates characters through
 #[derive(Clone)]
 pub struct Plugboard {
     wires: [u8; 26],
+}
+
+impl fmt::Display for Plugboard {
+    fn fmt(&self, f: &mut fmt::Formatter)->fmt::Result{
+        let mut display = String::new();
+        let mut completed: HashSet<char> = HashSet::new();
+        for (idx, val) in self.wires.iter().enumerate() {
+            if self.wires[idx] != val.clone() {
+                let start = (val + 97u8) as char;
+                let end = (self.wires[idx] + 97u8) as char;
+                // If the wire has not yet been added to the representation
+                if !completed.contains(&start) && !completed.contains(&end){
+                    if display.len() == 0{
+                        display.push_str(&format!("{}-{}", start, end))
+                    } else {
+                        display.push_str(&format!(",{}-{}", start, end))
+                    }
+                    // Set the wire as completed
+                    completed.insert(start);
+                    completed.insert(end);
+                }
+            }
+        }
+        write!(f, "{}", display)
+    }
 }
 
 impl Plugboard {

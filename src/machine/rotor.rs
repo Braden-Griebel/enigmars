@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::fmt;
 
 /// Represents the rotors of the Enigma machine. Translates characters passed into the rotor,
 /// steps the rotor when required (either each letter in the case of the rightmost rotor,
@@ -15,6 +16,21 @@ pub(crate) struct Rotor {
     offset: u8,
     /// Which steps will cause the left neighbor rotor to step as well
     notches: HashSet<u8>,
+}
+
+impl fmt::Display for Rotor {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let wire_configuration: String = self.path_fwd.iter()
+            .map(|v| (v+97u8) as char)
+            .collect();
+        let current_setting = (self.offset+97u8) as char;
+        let mut notches_vec:Vec<char> = self.notches.iter().map(|v| (v+97u8) as char)
+            .collect::<Vec<char>>();
+        notches_vec.sort();
+        let notches_str = notches_vec.iter().collect::<String>();
+        write!(f, "Wire Configuration: {}, Notches: {}, Current Setting: {}", wire_configuration,
+        notches_str, current_setting)
+    }
 }
 
 impl Rotor {

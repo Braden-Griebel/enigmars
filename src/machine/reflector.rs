@@ -1,4 +1,4 @@
-use std::ascii::AsciiExt;
+use std::fmt;
 
 /// Represents the reflector, which turns the signal around on the right side
 /// of the machine
@@ -6,6 +6,15 @@ use std::ascii::AsciiExt;
 pub struct Reflector {
     configuration: [u8;26],
     offset: u8,
+}
+
+impl fmt::Display for Reflector {
+    fn fmt(&self, f:&mut fmt::Formatter)->fmt::Result{
+        let wire_configuration:String = self.configuration.iter()
+            .map(|v| (v+97u8) as char)
+            .collect();
+        write!(f, "Wire Configuration: {}, Offset: {}", wire_configuration, (self.offset+97u8) as char)
+    }
 }
 
 impl Reflector{
