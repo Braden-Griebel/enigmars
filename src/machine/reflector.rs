@@ -2,6 +2,7 @@ use std::ascii::AsciiExt;
 
 /// Represents the reflector, which turns the signal around on the right side
 /// of the machine
+#[derive(Clone)]
 pub struct Reflector {
     configuration: [u8;26],
     offset: u8,

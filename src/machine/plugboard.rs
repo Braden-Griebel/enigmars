@@ -1,5 +1,6 @@
 /// Struct representing the plugboard.
 /// This translates characters through
+#[derive(Clone)]
 pub struct Plugboard {
     wires: [u8; 26],
 }
@@ -18,7 +19,7 @@ impl Plugboard {
 
     /// Add a wire between the start and end char. The chars
     /// can be upper or lowercase.
-    pub fn add_wire(&mut self, start: char, end: char) -> Result<(),Err(PlugboardError)> {
+    pub fn add_wire(&mut self, start: char, end: char) -> Result<(),PlugboardError> {
         let start = start.to_ascii_lowercase() as u8 - 97u8;
         let end = end.to_ascii_lowercase() as u8 - 97u8;
         // Check if there is already a wire originating from one of the ends
@@ -37,7 +38,7 @@ impl Plugboard {
 
     /// Remove a wire from the plugboard which starts at start, and ends at end
     /// (direction unimportant, so a-e and e-a are equivalent)
-    pub fn remove_wire(&mut self, start: char, end:char)->Result<(),Err(PlugboardError)>{
+    pub fn remove_wire(&mut self, start: char, end:char)->Result<(),PlugboardError>{
         let start = start.to_ascii_lowercase() as u8 - 97u8;
         let end = end.to_ascii_lowercase() as u8 - 97u8;
         if self.wires[start as usize] == end && self.wires[end as usize]==start{
