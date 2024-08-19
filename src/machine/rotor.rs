@@ -89,42 +89,42 @@ impl Rotor {
 
     // Functions to create specific Rotors
     /// Function to create a rotor with configuration I
-    pub fn new_I() -> Self {
+    pub fn new_i() -> Self {
         Self::new("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'a', "Q")
     }
 
     /// Function to create a rotor with configuration II
-    pub fn new_II() -> Self {
+    pub fn new_ii() -> Self {
         Self::new("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'a', "E")
     }
 
     /// Function to create a rotor with configuration III
-    pub fn new_III() -> Self {
+    pub fn new_iii() -> Self {
         Self::new("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'a', "V")
     }
 
     /// Function to create a rotor with configuration IV
-    pub fn new_IV() -> Self {
+    pub fn new_iv() -> Self {
         Self::new("ESOVPZJAYQUIRHXLNFTGKDCMWB", 'a', "J")
     }
 
     /// Function to create a rotor with configuration V
-    pub fn new_V() -> Self {
+    pub fn new_v() -> Self {
         Self::new("VZBRGITYUPSDNHLXAWMJQOFECK", 'a', "Z")
     }
 
     /// Function to create a rotor with configuration VI
-    pub fn new_VI() -> Self {
+    pub fn new_vi() -> Self {
         Self::new("JPGVOUMFYQBENHZRDKASXLICTW", 'a', "ZM")
     }
 
     /// Function to create a rotor with configuration VII
-    pub fn new_VII() -> Self {
+    pub fn new_vii() -> Self {
         Self::new("NZJHGRCXMYSWBOUFAIVLPEKQDT", 'a', "ZM")
     }
 
     /// Function to create a rotor with configuration VIII
-    pub fn new_VIII() -> Self {
+    pub fn new_viii() -> Self {
         Self::new("FKQHTLXOCBJSPDZRAMEWNIUYGV", 'a', "ZM")
     }
 
@@ -149,7 +149,7 @@ mod test_rotors{
 
     #[test]
     fn test_translation(){
-        let test_rotor = Rotor::new_I();
+        let test_rotor = Rotor::new_i();
         // Forward translate
         assert_eq!('a', test_rotor.translate_forward('u'));
         assert_eq!('e', test_rotor.translate_forward('a'));
@@ -160,7 +160,7 @@ mod test_rotors{
 
     #[test]
     fn test_step(){
-        let mut test_rotor = Rotor::new_I();
+        let mut test_rotor = Rotor::new_i();
         // Check translation
         assert_eq!('e', test_rotor.translate_forward('a'));
         assert_eq!('k', test_rotor.translate_forward('b'));
@@ -174,7 +174,7 @@ mod test_rotors{
 
     #[test]
     fn test_notch(){
-        let mut test_rotor = Rotor::new_I();
+        let mut test_rotor = Rotor::new_i();
         test_rotor.offset = 16;
         assert!(test_rotor.step());
     }

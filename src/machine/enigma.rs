@@ -1,8 +1,7 @@
-use std::collections::HashSet;
-use std::fmt;
-use crate::machine::rotor;
 use crate::machine::plugboard;
 use crate::machine::reflector;
+use crate::machine::rotor;
+use std::fmt;
 
 /// Struct representing the Enigma Machine
 #[derive(Clone)]
@@ -19,14 +18,14 @@ impl fmt::Display for Enigma {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f,
                "Rotor Configuration:
-                \t{}
-                \t{}
-                \t{}
-                Reflector Configuration:
-                \t{}
-                Plugboard Configuration:
-                \t{}
-                ",
+\tRotor 1:{}
+\tRotor 2:{}
+\tRotor 3:{}
+Reflector Configuration:
+\t{}
+Plugboard Configuration:
+\t{}
+",
                self.rotors[0], self.rotors[1], self.rotors[2],
                self.reflector,
                self.plugboard
@@ -36,7 +35,7 @@ impl fmt::Display for Enigma {
 
 impl Enigma {
     /// Create a new enigma machine with the provided rotors, plugboard, and reflector
-    pub fn new(r1: rotor::Rotor, r2: rotor::Rotor, r3: rotor::Rotor,
+    pub(crate) fn new(r1: rotor::Rotor, r2: rotor::Rotor, r3: rotor::Rotor,
                plugboard: plugboard::Plugboard, reflector: reflector::Reflector) -> Self {
         let rotors: [rotor::Rotor; 3] = [r1, r2, r3];
         Self {
@@ -49,50 +48,43 @@ impl Enigma {
     /// Create a default enigma configuration with rotors I,II,III and reflector A, with
     /// no wires in the plugboard
     pub fn default() -> Self {
-        let rotors: [rotor::Rotor; 3] = [rotor::Rotor::new_I(),
-            rotor::Rotor::new_II(), rotor::Rotor::new_III()];
-        let plugboard = plugboard::Plugboard::new();
-        let reflector: reflector::Reflector = reflector::Reflector::new_A();
-        Self {
-            rotors,
-            plugboard,
-            reflector,
-        }
+        Self::new(rotor::Rotor::new_i(), rotor::Rotor::new_ii(), rotor::Rotor::new_iii(),
+                  plugboard::Plugboard::new(),  reflector::Reflector::new_a())
     }
 
     /// Set a rotor in a given position
     pub fn choose_rotor(&mut self, rotor: &str, position: u8) -> Result<(), EnigmaError> {
         match rotor {
             "I" => {
-                self.rotors[position as usize] = rotor::Rotor::new_I();
+                self.rotors[position as usize] = rotor::Rotor::new_i();
                 Ok(())
             }
             "II" => {
-                self.rotors[position as usize] = rotor::Rotor::new_II();
+                self.rotors[position as usize] = rotor::Rotor::new_ii();
                 Ok(())
             }
             "III" => {
-                self.rotors[position as usize] = rotor::Rotor::new_III();
+                self.rotors[position as usize] = rotor::Rotor::new_iii();
                 Ok(())
             }
             "IV" => {
-                self.rotors[position as usize] = rotor::Rotor::new_IV();
+                self.rotors[position as usize] = rotor::Rotor::new_iv();
                 Ok(())
             }
             "V" => {
-                self.rotors[position as usize] = rotor::Rotor::new_V();
+                self.rotors[position as usize] = rotor::Rotor::new_v();
                 Ok(())
             }
             "VI" => {
-                self.rotors[position as usize] = rotor::Rotor::new_VI();
+                self.rotors[position as usize] = rotor::Rotor::new_vi();
                 Ok(())
             }
             "VII" => {
-                self.rotors[position as usize] = rotor::Rotor::new_VII();
+                self.rotors[position as usize] = rotor::Rotor::new_vii();
                 Ok(())
             }
             "VIII" => {
-                self.rotors[position as usize] = rotor::Rotor::new_VIII();
+                self.rotors[position as usize] = rotor::Rotor::new_viii();
                 Ok(())
             }
             r => {
@@ -105,15 +97,15 @@ impl Enigma {
     pub fn choose_reflector(&mut self, reflector: &str) -> Result<(), EnigmaError> {
         match reflector {
             "a" | "A" => {
-                self.reflector = reflector::Reflector::new_A();
+                self.reflector = reflector::Reflector::new_a();
                 Ok(())
             }
             "b" | "B" => {
-                self.reflector = reflector::Reflector::new_B();
+                self.reflector = reflector::Reflector::new_b();
                 Ok(())
             }
             "c" | "C" => {
-                self.reflector = reflector::Reflector::new_C();
+                self.reflector = reflector::Reflector::new_c();
                 Ok(())
             }
             r => {
@@ -179,7 +171,7 @@ impl Enigma {
     /// add connections between a and e; b and d; and x and z.
     pub fn add_plugboard_wires(&mut self, wires: &str) -> Result<(), EnigmaError> {
         for wire in wires.split(",") {
-            self.add_plugboard_wire(wire)?
+            self.add_plugboard_wire(wire.trim())?
         }
         Ok(())
     }
@@ -195,6 +187,18 @@ impl Enigma {
                 ))
             }
         }
+    }
+
+    /// Remove a series of wires from the plugboard, represented by a comma separated list of
+    /// characters, where each character represents one end of a wire to remove.
+    pub fn remove_plugboard_wires(&mut self, wire: &str)->Result<(), EnigmaError>{
+        for w in wire.split(","){
+            match w.trim().chars().next(){
+                None => {continue;}
+                Some(c) => {self.remove_plugboard_wire(c)?;}
+            }
+        }
+        Ok(())
     }
 
     /// Translate a string through the Enigma machine
@@ -251,7 +255,7 @@ impl Enigma {
     }
 }
 
-enum EnigmaError {
+pub enum EnigmaError {
     InvalidRotor(String),
     InvalidReflector(String),
     InvalidPlugboardWire(String),

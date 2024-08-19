@@ -13,9 +13,12 @@ impl fmt::Display for Plugboard {
         let mut display = String::new();
         let mut completed: HashSet<char> = HashSet::new();
         for (idx, val) in self.wires.iter().enumerate() {
-            if self.wires[idx] != val.clone() {
-                let start = (val + 97u8) as char;
-                let end = (self.wires[idx] + 97u8) as char;
+            if self.wires[idx] != idx as u8 {
+                let mut start = (idx as u8 + 97u8) as char;
+                let mut end = (val + 97u8) as char;
+                if start > end {
+                    (start, end) = (end,start);
+                }
                 // If the wire has not yet been added to the representation
                 if !completed.contains(&start) && !completed.contains(&end){
                     if display.len() == 0{
@@ -101,7 +104,7 @@ mod test_plugboard {
     #[test]
     fn test_translate(){
         let mut test_board = Plugboard::new();
-        test_board.add_wire('b', 'z');
+        let _ = test_board.add_wire('b', 'z');
         assert_eq!('a', test_board.translate_char('a'));
         assert_eq!(0u8, test_board.translate_u8(0u8));
         assert_eq!('b', test_board.translate_char('z'));

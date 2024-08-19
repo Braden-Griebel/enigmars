@@ -44,15 +44,15 @@ impl Reflector{
         self.offset = setting.to_ascii_lowercase() as u8 - 97u8;
     }
 
-    pub fn new_A()->Self {
+    pub fn new_a() ->Self {
         Self::new("EJMZALYXVBWFCRQUONTSPIKHGD", 'a')
     }
 
-    pub fn new_B()->Self {
+    pub fn new_b() ->Self {
         Self::new("YRUHQSLDPXNGOKMIEBFZCWVJAT", 'a')
     }
 
-    pub fn new_C()->Self {
+    pub fn new_c() ->Self {
         Self::new("FVPJIAOYEDRZXWGCTKUQSBNMHL", 'a')
     }
 
@@ -70,18 +70,18 @@ mod test_reflector{
     use super::*;
     #[test]
     fn test_translate(){
-        let test_reflector = Reflector::new_A();
+        let test_reflector = Reflector::new_a();
         assert_eq!('e', test_reflector.translate('a'));
     }
 
     #[test]
     fn test_configuration(){
         // test that reflector configurations all must loop (so if a->e, e->a)
-        let test_reflector  = Reflector::new_A();
+        let test_reflector  = Reflector::new_a();
         test_loop(&test_reflector);
-        let test_reflector  = Reflector::new_B();
+        let test_reflector  = Reflector::new_b();
         test_loop(&test_reflector);
-        let test_reflector  = Reflector::new_C();
+        let test_reflector  = Reflector::new_c();
         test_loop(&test_reflector);
     }
 
