@@ -64,10 +64,10 @@ impl Rotor {
     /// Step the rotor, returns true if the next rotor should step as well,
     /// and false otherwise
     pub fn step(&mut self) -> bool {
-        self.offset += 1;
+        self.offset = (self.offset+1)%26;
         // The -1 here is due to the way the rotor notches are normally described,
         // the step occurs when stepping off the position rather than stepping onto it
-        if self.notches.contains(&(self.offset-1)) {
+        if self.notches.contains(&(Self::wrap_26_sub(self.offset,1))) {
             return true;
         }
         false

@@ -248,8 +248,6 @@ impl Enigma {
         for r in self.rotors.iter_mut().rev() {
             if to_step {
                 to_step = r.step();
-            } else {
-                to_step = false;
             }
         }
     }
@@ -306,5 +304,18 @@ mod test_enigma {
 
         assert_eq!("this is a coded message", decoded);
         assert_ne!(encoded, "this is a coded message");
+    }
+
+    #[test]
+    fn test_long_translation(){
+        let mut test_encoder  = Enigma::default();
+        _ = test_encoder.choose_reflector("B");
+        _ = test_encoder.add_plugboard_wires("d-r,g-m,k-o,t-y");
+        let mut test_decoder = test_encoder.clone();
+        let to_encode = "this is a long message that will be encoded. woot.";
+        let encoded = test_encoder.translate(to_encode);
+        let decoded = test_decoder.translate(&encoded);
+        assert_eq!(to_encode, decoded);
+        assert_ne!(to_encode, encoded);
     }
 }
